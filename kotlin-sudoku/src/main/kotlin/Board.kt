@@ -85,15 +85,8 @@ data class Board(val cells: MutableMap<Position, Cell>) {
     fun setCell(position: Position, value: Int) {
         cells[position] = Cell(setOf(value))
 
-        row(position.y).minus(position).forEach {
-            eliminatePossibility(it, value)
-        }
-
-        column(position.x).minus(position).forEach {
-            eliminatePossibility(it, value)
-        }
-
-        regionContaining(position).minus(position).forEach {
+        val connectedCells = row(position.y) + column(position.x) + regionContaining(position) - position
+        connectedCells.forEach {
             eliminatePossibility(it, value)
         }
     }
