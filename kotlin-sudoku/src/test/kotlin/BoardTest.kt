@@ -11,11 +11,33 @@ class BoardTest {
 
     @Test
     fun `can set a single cell`() {
-        val board = Board.populate(EMPTY_BOARD)
+        val board = Board.populate(
+            """
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+            """.trimIndent()
+        )
 
         board.setCell(Position(1, 1), 7)
 
-        board.dumpToString() shouldBe EMPTY_BOARD_WITH_7_ADDED
+        board.dumpToString() shouldBe """
+                _________
+                _7_______
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+            """.trimIndent()
     }
 
     @Test
@@ -46,6 +68,36 @@ class BoardTest {
                 _________
             """.trimIndent()
     }
+
+    @Test
+    fun `can solve a region`() {
+        val board = Board.populate(
+            """
+                123______
+                456______
+                78_______
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+            """.trimIndent()
+        )
+
+        board.dumpToString() shouldBe """
+                123______
+                456______
+                789______
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+            """.trimIndent()
+    }
+
 
     @Test
     fun `can solve a column`() {
@@ -80,58 +132,33 @@ class BoardTest {
     fun `solving one cell propagates to other connected cells`() {
         val board = Board.populate(
             """
-                ________1
-                ________2
-                ________3
-                ________4
-                ________5
-                ________6
-                ________7
+                ________9
                 ________8
+                ________7
+                ________6
+                ________5
+                ________4
+                ________3
+                ________2
                 _2345678_
             """.trimIndent()
         )
 
         board.dumpToString() shouldBe """
-                ________1
-                ________2
-                ________3
-                ________4
-                ________5
-                ________6
-                ________7
+                ________9
                 ________8
-                123456789
+                ________7
+                ________6
+                ________5
+                ________4
+                ________3
+                ________2
+                923456781
             """.trimIndent()
     }
 
 
 }
-
-val EMPTY_BOARD = """
-            _________
-            _________
-            _________
-            _________
-            _________
-            _________
-            _________
-            _________
-            _________
-        """.trimIndent()
-
-val EMPTY_BOARD_WITH_7_ADDED = """
-            _________
-            _7_______
-            _________
-            _________
-            _________
-            _________
-            _________
-            _________
-            _________
-        """.trimIndent()
-
 
 val BOARD1_INPUT = """
             53__7____

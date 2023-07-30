@@ -35,6 +35,17 @@ data class Board(val cells: MutableMap<Position, Cell>) {
             Position(x, y)
         }
 
+    private fun regionContaining(pos: Position): List<Position> {
+        val xOrigin = pos.x - (pos.x % 3)
+        val yOrigin = pos.y - (pos.y % 3)
+
+        return (xOrigin..xOrigin+2).flatMap { x->
+            (yOrigin..yOrigin+2).map { y ->
+                Position(x, y)
+            }
+        }
+    }
+
     companion object {
         fun parse(contents: String): Board {
             val cells =
@@ -79,6 +90,10 @@ data class Board(val cells: MutableMap<Position, Cell>) {
         }
 
         column(position.x).minus(position).forEach {
+            eliminatePossibility(it, value)
+        }
+
+        regionContaining(position).minus(position).forEach {
             eliminatePossibility(it, value)
         }
     }
