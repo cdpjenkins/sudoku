@@ -76,6 +76,36 @@ class BoardTest {
             """.trimIndent()
     }
 
+    @Test
+    fun `solving one cell propagates to other connected cells`() {
+        val board = Board.populate(
+            """
+                ________1
+                ________2
+                ________3
+                ________4
+                ________5
+                ________6
+                ________7
+                ________8
+                _2345678_
+            """.trimIndent()
+        )
+
+        board.dumpToString() shouldBe """
+                ________1
+                ________2
+                ________3
+                ________4
+                ________5
+                ________6
+                ________7
+                ________8
+                123456789
+            """.trimIndent()
+    }
+
+
 }
 
 val EMPTY_BOARD = """
