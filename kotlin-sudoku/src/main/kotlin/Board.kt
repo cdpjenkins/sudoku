@@ -11,6 +11,30 @@ data class Board(val cells: MutableMap<Position, Cell>) {
         }.joinToString("\n")
     }
 
+    fun rows(): List<List<Cell>> {
+        return rowPositions().map { rowPositions ->
+            rowPositions.map { pos ->
+                cells[pos]!!
+            }
+        }
+    }
+
+    private fun rowPositions(): List<List<Position>> {
+        return (0..8).map {y ->
+            row(y)
+        }
+    }
+
+    private fun row(y: Int) =
+        (0..8).map { x ->
+            Position(x, y)
+        }
+
+    private fun column(x: Int): List<Position> =
+        (0..8).map { y ->
+            Position(x, y)
+        }
+
     companion object {
         fun parse(contents: String): Board {
             val cells =
@@ -28,7 +52,7 @@ data class Board(val cells: MutableMap<Position, Cell>) {
                 Board(
                     (0..8).flatMap { y ->
                         (0..8).map { x ->
-                            Position(x, y) to Cell(emptySet())
+                            Position(x, y) to Cell(Cell.ALL_POSSIBILITIES)
                         }
                     }.toMap().toMutableMap()
                 )
@@ -49,6 +73,25 @@ data class Board(val cells: MutableMap<Position, Cell>) {
 
     fun setCell(position: Position, value: Int) {
         cells[position] = Cell(setOf(value))
+
+        row(position.y).minus(position).forEach {
+            eliminatePossibility(it, value)
+        }
+
+        column(position.x).minus(position).forEach {
+            eliminatePossibility(it, value)
+        }
+    }
+
+    private fun eliminatePossibility(pos: Position, value: Int) {
+        val oldCell = cells[pos]!!
+        if (!oldCell.solved()) {
+            val newCell = oldCell.eliminatePossibility(value)
+            cells[pos] = newCell
+            if (newCell.solved()) {
+                setCell(pos, newCell.getSolvedValue())
+            }
+        }
     }
 }
 
@@ -60,8 +103,30 @@ data class Cell(val possibilities: Set<Int>) {
             "_"
         }
 
+    fun eliminatePossibility(value: Int): Cell {
+        return if (value in possibilities) {
+            Cell(possibilities - value)
+        } else {
+            this
+        }
+    }
+
+    fun solved(): Boolean {
+        return possibilities.size == 1
+    }
+
+    fun getSolvedValue(): Int {
+        return if (possibilities.size == 1) {
+            possibilities.first()
+        } else {
+            throw IllegalStateException("$this")
+        }
+    }
+
     companion object {
-        fun parse(ch: Char) = Cell(ch.digitToIntOrNull()?.let { setOf(it) } ?: emptySet())
+        val ALL_POSSIBILITIES = (1..9).toSet()
+
+        fun parse(ch: Char) = Cell(ch.digitToIntOrNull()?.let { setOf(it) } ?: ALL_POSSIBILITIES)
     }
 }
 

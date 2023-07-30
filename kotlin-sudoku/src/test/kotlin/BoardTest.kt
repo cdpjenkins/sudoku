@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 class BoardTest {
     @Test
     fun `can parse and print a board`() {
-        val board = Board.populate(BOARD1_INPUT)
+        val board = Board.parse(BOARD1_INPUT)
 
         board.dumpToString() shouldBe BOARD1_INPUT
     }
@@ -17,6 +17,65 @@ class BoardTest {
 
         board.dumpToString() shouldBe EMPTY_BOARD_WITH_7_ADDED
     }
+
+    @Test
+    fun `can solve a row`() {
+        val board = Board.populate(
+            """
+                12345678_
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+            """.trimIndent()
+        )
+
+        board.dumpToString() shouldBe """
+                123456789
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+            """.trimIndent()
+    }
+
+    @Test
+    fun `can solve a column`() {
+        val board = Board.populate(
+            """
+                ________1
+                ________2
+                ________3
+                ________4
+                ________5
+                ________6
+                ________7
+                ________8
+                _________
+            """.trimIndent()
+        )
+
+        board.dumpToString() shouldBe """
+                ________1
+                ________2
+                ________3
+                ________4
+                ________5
+                ________6
+                ________7
+                ________8
+                ________9
+            """.trimIndent()
+    }
+
 }
 
 val EMPTY_BOARD = """
