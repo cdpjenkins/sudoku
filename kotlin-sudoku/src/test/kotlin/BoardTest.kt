@@ -10,6 +10,25 @@ class BoardTest {
     }
 
     @Test
+    fun `can solve board1 (easy) in one iteration`() {
+        val board = Board.populate(BOARD1_INPUT)
+
+        board.solveOneIteration()
+
+        board.dumpToString() shouldBe """
+            534678912
+            672195348
+            198342567
+            859761423
+            426853791
+            713924856
+            961537284
+            287419635
+            345286179
+        """.trimIndent()
+    }
+
+    @Test
     fun `can set a single cell`() {
         val board = Board.populate(
             """
