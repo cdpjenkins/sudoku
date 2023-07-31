@@ -10,6 +10,23 @@ class BoardTest {
     }
 
     @Test
+    fun `impossible board is recognised as impossible`() {
+        val board = Board.populate("""
+             _12345678
+             9________
+             _________
+             _________
+             _________
+             _________
+             _________
+             _________
+             _________
+        """.trimIndent())
+
+        board.isImpossible() shouldBe true
+    }
+
+    @Test
     fun `can solve board1 (easy) in one iteration`() {
         val board = Board.populate(BOARD1_INPUT)
 

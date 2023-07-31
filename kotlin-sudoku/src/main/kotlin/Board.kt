@@ -25,6 +25,10 @@ data class Board(val cells: MutableMap<Position, Cell>) {
         return cells.all { (_, cell) -> cell.possibilities.size == 1 }
     }
 
+    fun isImpossible(): Boolean {
+        return cells.any { (_, cell) -> cell.possibilities.isEmpty() }
+    }
+
     private fun clone(): Board {
         return Board(cells.toMutableMap())
     }
@@ -125,9 +129,15 @@ data class Board(val cells: MutableMap<Position, Cell>) {
     }
 
     fun setCell(position: Position, value: Int) {
+
+        if (value == 9) {
+            println(position)
+            println(value)
+        }
+
         cells[position] = Cell(setOf(value))
 
-        val connectedCells = row(position.y) + column(position.x) + squareContaining(position) - position
+        val connectedCells = (row(position.y) + column(position.x) + squareContaining(position)).filter { it != position}
         connectedCells.forEach {
             eliminatePossibility(it, value)
         }
@@ -135,12 +145,10 @@ data class Board(val cells: MutableMap<Position, Cell>) {
 
     private fun eliminatePossibility(pos: Position, value: Int) {
         val oldCell = cells[pos]!!
-        if (!oldCell.solved()) {
-            val newCell = oldCell.eliminatePossibility(value)
-            cells[pos] = newCell
-            if (newCell.solved()) {
-                setCell(pos, newCell.getSolvedValue())
-            }
+        val newCell = oldCell.eliminatePossibility(value)
+        cells[pos] = newCell
+        if (!oldCell.solved() && newCell.solved()) {
+            setCell(pos, newCell.getSolvedValue())
         }
     }
 }
