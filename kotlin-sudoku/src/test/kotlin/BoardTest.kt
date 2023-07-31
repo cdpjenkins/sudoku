@@ -34,14 +34,7 @@ class BoardTest {
     fun `can NOT solve board6 (hard) merely with repeated calls to solveOneIteration()`() {
         val board = Board.populate(BOARD6_INPUT)
 
-        val boardSeq = generateSequence(board) {
-            val nextBoard = it.solveOneIteration()
-            if (nextBoard != it) nextBoard
-            else null
-        }
-
-        val bestWeCanDo = boardSeq
-            .last()
+        val bestWeCanDo = board.solveMultipleIterations()
 
         bestWeCanDo.dumpToString() shouldBe """
             3__198_76
@@ -54,19 +47,6 @@ class BoardTest {
             2_53_97_1
             71_5___3_
         """.trimIndent()
-
-
-//        resultBoard.dumpToString() shouldBe """
-//            534678912
-//            672195348
-//            198342567
-//            859761423
-//            426853791
-//            713924856
-//            961537284
-//            287419635
-//            345286179
-//        """.trimIndent()
     }
 
     @Test

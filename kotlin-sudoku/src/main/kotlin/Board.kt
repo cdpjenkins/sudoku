@@ -11,6 +11,16 @@ data class Board(val cells: MutableMap<Position, Cell>) {
         return newBoard
     }
 
+    fun solveMultipleIterations(): Board {
+        val boardSeq = generateSequence(this) {
+            val nextBoard = it.solveOneIteration()
+            if (nextBoard != it) nextBoard
+            else null
+        }
+
+        return boardSeq.last()
+    }
+
     private fun clone(): Board {
         return Board(cells.toMutableMap())
     }
