@@ -1,4 +1,21 @@
 data class Board(val cells: MutableMap<Position, Cell>) {
+
+    fun solveOneIteration() {
+        (rows() + columns() + squares())
+            .forEach { row ->
+                solveRegion(row)
+            }
+    }
+
+    private fun solveRegion(region: List<Position>) {
+        (1..9).forEach { value ->
+            val cellsThatCouldBeThatValue = region.filter { value in cells[it]!!.possibilities }
+            if (cellsThatCouldBeThatValue.size == 1) {
+                setCell(cellsThatCouldBeThatValue.first(), value)
+            }
+        }
+    }
+
     fun dump() {
         println(dumpToString())
     }
@@ -11,31 +28,34 @@ data class Board(val cells: MutableMap<Position, Cell>) {
         }.joinToString("\n")
     }
 
-    fun rows(): List<List<Cell>> {
-        return rowPositions().map { rowPositions ->
-            rowPositions.map { pos ->
-                cells[pos]!!
-            }
-        }
-    }
-
-    private fun rowPositions(): List<List<Position>> {
+    private fun rows(): List<List<Position>> {
         return (0..8).map {y ->
             row(y)
         }
     }
 
-    private fun row(y: Int) =
-        (0..8).map { x ->
-            Position(x, y)
-        }
+    private fun row(y: Int) = (0..8).map { x -> Position(x, y) }
 
-    private fun column(x: Int): List<Position> =
-        (0..8).map { y ->
-            Position(x, y)
+    private fun columns(): List<List<Position>> {
+        return (0..8).map { x ->
+            column(x)
         }
+    }
+    private fun column(x: Int): List<Position> = (0..8).map { y -> Position(x, y) }
 
-    private fun regionContaining(pos: Position): List<Position> {
+    fun squares(): List<List<Position>> {
+        return (0..8 step 3).flatMap { originY ->
+            (0..8 step 3).map { originX ->
+                (0..2).flatMap { y ->
+                    (0..2).map { x ->
+                        Position(x, y)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun squareContaining(pos: Position): List<Position> {
         val xOrigin = pos.x - (pos.x % 3)
         val yOrigin = pos.y - (pos.y % 3)
 
@@ -85,7 +105,7 @@ data class Board(val cells: MutableMap<Position, Cell>) {
     fun setCell(position: Position, value: Int) {
         cells[position] = Cell(setOf(value))
 
-        val connectedCells = row(position.y) + column(position.x) + regionContaining(position) - position
+        val connectedCells = row(position.y) + column(position.x) + squareContaining(position) - position
         connectedCells.forEach {
             eliminatePossibility(it, value)
         }

@@ -129,6 +129,99 @@ class BoardTest {
     }
 
     @Test
+    fun `can solve a row where only one cell can be a particular value`() {
+        val board = Board.populate(
+            """
+                ____45678
+                1________
+                _________
+                _1_______
+                _________
+                _________
+                __1______
+                _________
+                _________
+            """.trimIndent()
+        )
+
+        board.solveOneIteration()
+
+        board.dumpToString() shouldBe """
+                ___145678
+                1________
+                _________
+                _1_______
+                _________
+                _________
+                __1______
+                _________
+                _________
+            """.trimIndent()
+    }
+
+    @Test
+    fun `can solve a column where only one cell can be a particular value`() {
+        val board = Board.populate(
+            """
+                __1______
+                ___1_____
+                ________1
+                _________
+                4________
+                5________
+                6________
+                7________
+                8________
+            """.trimIndent()
+        )
+
+        board.solveOneIteration()
+
+        board.dumpToString() shouldBe """
+                __1______
+                ___1_____
+                ________1
+                1________
+                4________
+                5________
+                6________
+                7________
+                8________
+            """.trimIndent()
+    }
+
+    @Test
+    fun `can solve a square where only one cell can be a particular value`() {
+        val board = Board.populate(
+            """
+                ________1
+                _____1___
+                _________
+                _1_______
+                _________
+                _________
+                __1______
+                _________
+                _________
+            """.trimIndent()
+        )
+
+        board.solveOneIteration()
+
+        board.dumpToString() shouldBe """
+                ________1
+                _____1___
+                1________
+                _1_______
+                _________
+                _________
+                __1______
+                _________
+                _________
+            """.trimIndent()
+    }
+
+    @Test
     fun `solving one cell propagates to other connected cells`() {
         val board = Board.populate(
             """
@@ -156,8 +249,6 @@ class BoardTest {
                 923456781
             """.trimIndent()
     }
-
-
 }
 
 val BOARD1_INPUT = """
