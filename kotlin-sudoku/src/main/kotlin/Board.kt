@@ -21,6 +21,10 @@ data class Board(val cells: MutableMap<Position, Cell>) {
         return boardSeq.last()
     }
 
+    fun isCompleted(): Boolean {
+        return cells.all { (_, cell) -> cell.possibilities.size == 1 }
+    }
+
     private fun clone(): Board {
         return Board(cells.toMutableMap())
     }

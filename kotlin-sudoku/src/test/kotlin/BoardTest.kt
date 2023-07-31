@@ -15,6 +15,7 @@ class BoardTest {
 
         val resultBoard = board.solveOneIteration()
 
+        resultBoard.isCompleted() shouldBe true
         resultBoard.dumpToString() shouldBe """
             534678912
             672195348
@@ -28,14 +29,13 @@ class BoardTest {
         """.trimIndent()
     }
 
-
-
     @Test
     fun `can NOT solve board6 (hard) merely with repeated calls to solveOneIteration()`() {
         val board = Board.populate(BOARD6_INPUT)
 
         val bestWeCanDo = board.solveMultipleIterations()
 
+        bestWeCanDo.isCompleted() shouldBe false
         bestWeCanDo.dumpToString() shouldBe """
             3__198_76
             9_17_53_4
@@ -314,17 +314,3 @@ val BOARD6_INPUT = """
             2_53_97_1
             7__5_____
         """.trimIndent()
-
-val EMPTY_BOARD = Board.populate(
-    """
-                _________
-                _________
-                _________
-                _________
-                _________
-                _________
-                _________
-                _________
-                _________
-            """.trimIndent()
-)
