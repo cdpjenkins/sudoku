@@ -30,7 +30,7 @@ class BoardTest {
     fun `can solve board1 (easy) in one iteration`() {
         val board = Board.populate(BOARD1_INPUT)
 
-        val resultBoard = board.solveOneIteration()
+        val resultBoard = board.solve()
 
         resultBoard.isCompleted() shouldBe true
         resultBoard.dumpToString() shouldBe """
@@ -63,6 +63,26 @@ class BoardTest {
             _3_417___
             2_53_97_1
             71_5___3_
+        """.trimIndent()
+    }
+
+    @Test
+    fun `we CAN solve board6 (hard) if make a guess and do a depth-first search of possible moves`() {
+        val board = Board.populate(BOARD6_INPUT)
+
+        val resultBoard = board.solve()
+
+        resultBoard.isCompleted() shouldBe true
+        resultBoard.dumpToString() shouldBe """
+            342198576
+            961725384
+            857634912
+            173946258
+            498253167
+            526871493
+            639417825
+            285369741
+            714582639
         """.trimIndent()
     }
 

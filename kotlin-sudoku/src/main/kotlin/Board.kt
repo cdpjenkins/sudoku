@@ -1,5 +1,36 @@
 data class Board(val cells: MutableMap<Position, Cell>) {
 
+    fun solve(): Board {
+        val newBoard = solveMultipleIterations()
+
+        if (newBoard.isCompleted()) {
+            return newBoard
+        } else if (newBoard.isImpossible()) {
+            return newBoard
+        } else {
+            return newBoard.depthFirstSearch()
+        }
+    }
+
+    fun depthFirstSearch(): Board {
+        val sortedPositions = this.cells.keys.sortedWith { lhs, rhs ->
+            this.cells[lhs]!!.possibilities.size - this.cells[rhs]!!.possibilities.size
+        }
+
+        val pos = sortedPositions
+            .filter { cells[it]!!.possibilities.size > 1 }
+            .first()
+        val cell = cells[pos]!!
+
+        val solns = cell.possibilities.map { value ->
+            this.clone()
+                .setCell(pos, value)
+                .solve()
+        }
+
+        return solns.first { !it.isImpossible() }
+    }
+
     fun solveOneIteration(): Board {
         val newBoard = this.clone().apply {
             (rows() + columns() + squares())
@@ -128,12 +159,7 @@ data class Board(val cells: MutableMap<Position, Cell>) {
         }
     }
 
-    fun setCell(position: Position, value: Int) {
-
-        if (value == 9) {
-            println(position)
-            println(value)
-        }
+    fun setCell(position: Position, value: Int): Board {
 
         cells[position] = Cell(setOf(value))
 
@@ -141,6 +167,8 @@ data class Board(val cells: MutableMap<Position, Cell>) {
         connectedCells.forEach {
             eliminatePossibility(it, value)
         }
+
+        return this
     }
 
     private fun eliminatePossibility(pos: Position, value: Int) {
