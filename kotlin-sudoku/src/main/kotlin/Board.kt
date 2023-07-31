@@ -1,10 +1,18 @@
 data class Board(val cells: MutableMap<Position, Cell>) {
 
-    fun solveOneIteration() {
-        (rows() + columns() + squares())
-            .forEach { row ->
-                solveRegion(row)
-            }
+    fun solveOneIteration(): Board {
+        val newBoard = this.clone().apply {
+            (rows() + columns() + squares())
+                .forEach { row ->
+                    solveRegion(row)
+                }
+        }
+
+        return newBoard
+    }
+
+    private fun clone(): Board {
+        return Board(cells.toMutableMap())
     }
 
     private fun solveRegion(region: List<Position>) {

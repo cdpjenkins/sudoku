@@ -13,9 +13,9 @@ class BoardTest {
     fun `can solve board1 (easy) in one iteration`() {
         val board = Board.populate(BOARD1_INPUT)
 
-        board.solveOneIteration()
+        val resultBoard = board.solveOneIteration()
 
-        board.dumpToString() shouldBe """
+        resultBoard.dumpToString() shouldBe """
             534678912
             672195348
             198342567
@@ -26,6 +26,47 @@ class BoardTest {
             287419635
             345286179
         """.trimIndent()
+    }
+
+
+
+    @Test
+    fun `can NOT solve board6 (hard) merely with repeated calls to solveOneIteration()`() {
+        val board = Board.populate(BOARD6_INPUT)
+
+        val boardSeq = generateSequence(board) {
+            val nextBoard = it.solveOneIteration()
+            if (nextBoard != it) nextBoard
+            else null
+        }
+
+        val bestWeCanDo = boardSeq
+            .last()
+
+        bestWeCanDo.dumpToString() shouldBe """
+            3__198_76
+            9_17_53_4
+            ____34_1_
+            1__94__5_
+            49__5_167
+            52__71__3
+            _3_417___
+            2_53_97_1
+            71_5___3_
+        """.trimIndent()
+
+
+//        resultBoard.dumpToString() shouldBe """
+//            534678912
+//            672195348
+//            198342567
+//            859761423
+//            426853791
+//            713924856
+//            961537284
+//            287419635
+//            345286179
+//        """.trimIndent()
     }
 
     @Test
@@ -163,9 +204,9 @@ class BoardTest {
             """.trimIndent()
         )
 
-        board.solveOneIteration()
+        val resultBoard = board.solveOneIteration()
 
-        board.dumpToString() shouldBe """
+        resultBoard.dumpToString() shouldBe """
                 ___145678
                 1________
                 _________
@@ -194,9 +235,9 @@ class BoardTest {
             """.trimIndent()
         )
 
-        board.solveOneIteration()
+        val resultBoard = board.solveOneIteration()
 
-        board.dumpToString() shouldBe """
+        resultBoard.dumpToString() shouldBe """
                 __1______
                 ___1_____
                 ________1
@@ -225,9 +266,9 @@ class BoardTest {
             """.trimIndent()
         )
 
-        board.solveOneIteration()
+         val resultBoard = board.solveOneIteration()
 
-        board.dumpToString() shouldBe """
+        resultBoard.dumpToString() shouldBe """
                 ________1
                 _____1___
                 1________
@@ -281,3 +322,29 @@ val BOARD1_INPUT = """
             ___419__5
             ____8__79
         """.trimIndent()
+
+val BOARD6_INPUT = """
+            _____8__6
+            9_17_53_4
+            _____4_1_
+            1__94__5_
+            49__5__67
+            _2__71__3
+            _3_4_____
+            2_53_97_1
+            7__5_____
+        """.trimIndent()
+
+val EMPTY_BOARD = Board.populate(
+    """
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+                _________
+            """.trimIndent()
+)
