@@ -1,5 +1,4 @@
 data class Board(val cells: MutableMap<Position, Cell>) {
-
     fun solve(): Board {
         val newBoard = solveMultipleIterations()
 
@@ -14,17 +13,18 @@ data class Board(val cells: MutableMap<Position, Cell>) {
 
     fun depthFirstSearch(): Board {
         val sortedPositions = this.cells.keys.sortedWith { lhs, rhs ->
-            this.cells[lhs]!!.possibilities.size - this.cells[rhs]!!.possibilities.size
+            val cell = cellAt(lhs)
+            cell.numPossibilitiesRemaining() - cellAt(rhs).numPossibilitiesRemaining()
         }
 
         val pos = sortedPositions
-            .filter { cells[it]!!.possibilities.size > 1 }
+            .filter { cellAt(it).numPossibilitiesRemaining() > 1 }
             .first()
-        val cell = cells[pos]!!
+        val cell = cellAt(pos)
 
-        val solns = cell.possibilities.map { value ->
+        val solns = cell.possibilitiesRemaining().map { value ->
             this.clone()
-                .setCell(pos, value)
+                .setSolvedCell(pos, value)
                 .solve()
         }
 
@@ -53,11 +53,11 @@ data class Board(val cells: MutableMap<Position, Cell>) {
     }
 
     fun isCompleted(): Boolean {
-        return cells.all { (_, cell) -> cell.possibilities.size == 1 }
+        return cells.all { (_, cell) -> cell.numPossibilitiesRemaining() == 1 }
     }
 
     fun isImpossible(): Boolean {
-        return cells.any { (_, cell) -> cell.possibilities.isEmpty() }
+        return cells.any { (_, cell) -> cell.numPossibilitiesRemaining() == 0 }
     }
 
     private fun clone(): Board {
@@ -66,9 +66,9 @@ data class Board(val cells: MutableMap<Position, Cell>) {
 
     private fun solveRegion(region: List<Position>) {
         (1..9).forEach { value ->
-            val cellsThatCouldBeThatValue = region.filter { value in cells[it]!!.possibilities }
+            val cellsThatCouldBeThatValue = region.filter { value in cellAt(it).possibilitiesRemaining() }
             if (cellsThatCouldBeThatValue.size == 1) {
-                setCell(cellsThatCouldBeThatValue.first(), value)
+                setSolvedCell(cellsThatCouldBeThatValue.first(), value)
             }
         }
     }
@@ -80,7 +80,7 @@ data class Board(val cells: MutableMap<Position, Cell>) {
     fun dumpToString(): String {
         return (0..8).map { y: Int ->
             (0..8).map { x: Int ->
-                cells[Position(x, y)]!!.dumpToString()
+                cellAt(Position(x, y)).dumpToString()
             }.joinToString("")
         }.joinToString("\n")
     }
@@ -151,7 +151,7 @@ data class Board(val cells: MutableMap<Position, Cell>) {
                         val value = ch.digitToIntOrNull()
 
                         if (value != null) {
-                            board.setCell(Position(x, y), value)
+                            board.setSolvedCell(Position(x, y), value)
                         }
                     }
                 }
@@ -159,8 +159,7 @@ data class Board(val cells: MutableMap<Position, Cell>) {
         }
     }
 
-    fun setCell(position: Position, value: Int): Board {
-
+    fun setSolvedCell(position: Position, value: Int): Board {
         cells[position] = Cell(setOf(value))
 
         val connectedCells = (row(position.y) + column(position.x) + squareContaining(position)).filter { it != position}
@@ -172,19 +171,25 @@ data class Board(val cells: MutableMap<Position, Cell>) {
     }
 
     private fun eliminatePossibility(pos: Position, value: Int) {
-        val oldCell = cells[pos]!!
+        val oldCell = cellAt(pos)
         val newCell = oldCell.eliminatePossibility(value)
         cells[pos] = newCell
         if (!oldCell.solved() && newCell.solved()) {
-            setCell(pos, newCell.getSolvedValue())
+            setSolvedCell(pos, newCell.getSolvedValue())
         }
     }
+
+    private fun cellAt(lhs: Position) = this.cells[lhs]!!
 }
 
-data class Cell(val possibilities: Set<Int>) {
+data class Cell(private val possibilities: Set<Int>) {
+    fun numPossibilitiesRemaining() = possibilities.size
+
+    fun possibilitiesRemaining() = possibilities
+
     fun dumpToString(): String =
-        if (possibilities.size == 1) {
-            possibilities.first().toString()
+        if (numPossibilitiesRemaining() == 1) {
+            possibilitiesRemaining().first().toString()
         } else {
             "_"
         }

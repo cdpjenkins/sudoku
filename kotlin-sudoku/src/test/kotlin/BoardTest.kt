@@ -102,7 +102,7 @@ class BoardTest {
             """.trimIndent()
         )
 
-        board.setCell(Position(1, 1), 7)
+        board.setSolvedCell(Position(1, 1), 7)
 
         board.dumpToString() shouldBe """
                 _________
