@@ -1,0 +1,5 @@
+#ifndef CPP_SUDOKU_MAIN_HPP
+#define CPP_SUDOKU_MAIN_HPP
+
+
+#endif //CPP_SUDOKU_MAIN_HPP
