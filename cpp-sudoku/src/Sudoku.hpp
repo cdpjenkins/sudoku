@@ -30,7 +30,8 @@ private:
 
 class Board {
 public:
-    Board();
+    explicit Board();
+    explicit Board(std::string &&input);
 
     std::string dump_to_string();
     void set_cell(int x, int y, uint16_t value);

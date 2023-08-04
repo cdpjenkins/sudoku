@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include "Sudoku.hpp"
 
 int Cell::get_value() {
@@ -55,6 +57,24 @@ char Cell::to_char() {
 
 Board::Board() {
     
+}
+
+Board::Board(std::string &&input) {
+    // this is probably a terrible way to parse the input
+
+    std::istringstream ss{input};
+
+    auto cells_it = cells.begin();
+
+    for (int y = 0; y < 9; y++) {
+        std::string line;
+        std::getline(ss, line);
+        auto ch_it = line.begin();
+        for (int x = 0; x < 9; x++) {
+            char ch = *ch_it++;
+            (*cells_it++) = Cell::parse(ch);
+        }
+    }
 }
 
 std::string Board::dump_to_string() {

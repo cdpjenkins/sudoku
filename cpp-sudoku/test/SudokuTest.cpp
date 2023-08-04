@@ -45,3 +45,41 @@ TEST_CASE("Can set a single value") {
                                     "_________"
     );
 }
+
+TEST_CASE("Can set a single value") {
+    Board board{};
+    board.set_cell(0, 0, 1);
+    CHECK(board.dump_to_string() == "1________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________"
+    );
+}
+
+TEST_CASE("Can initialise board with multiple cells") {
+    // notice how no constrain propagation is happening yet
+    Board board{"12345678_\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "98765____\n"
+                "_________"};
+    CHECK(board.dump_to_string() == "12345678_\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "98765____\n"
+                                    "_________"
+    );
+}
