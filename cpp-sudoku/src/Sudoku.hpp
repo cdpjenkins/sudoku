@@ -14,12 +14,18 @@ public:
     explicit Cell(uint16_t possibilities) : possibilities(possibilities) {}
 
     static Cell parse(char c);
-    uint_fast16_t get_value();
+    static Cell of(int value);
+
+    int get_value();
+
+    char to_char();
 
 private:
     // bit n indicates that this cell can (possibly) be in
     // this implies that bits 1..9 are used and the rest are not
     uint16_t possibilities;
+
+    static constexpr int NO_VALUE = 0;
 };
 
 class Board {
@@ -27,6 +33,7 @@ public:
     Board();
 
     std::string dump_to_string();
+    void set_cell(int x, int y, uint16_t value);
 
 private:
     std::array<Cell, 81> cells;

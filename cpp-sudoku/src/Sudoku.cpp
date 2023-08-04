@@ -1,10 +1,6 @@
-//
-// Created by Chris Jenkins on 04/08/2023.
-//
-
 #include "Sudoku.hpp"
 
-uint_fast16_t Cell::get_value() {
+int Cell::get_value() {
     switch (possibilities) {
         case (1 << 1):
             return 1;
@@ -33,26 +29,53 @@ Cell Cell::parse(char c) {
     if (isdigit(c)) {
         int value = c - '0';
 
-        if (value >= 1 && value <= 9) {
-            return Cell(1 << value);
-        } else {
-            throw std::runtime_error("bad value: " + std::to_string(value));
-        }
+        return Cell::of(value);
+    } else {
+        return Cell();
+    }
+}
+
+Cell Cell::of(int value) {
+    if (value >= 1 && value <= 9) {
+        return Cell(1 << value);
+    } else {
+        throw std::runtime_error("bad value: " + std::to_string(value));
+    }
+}
+
+char Cell::to_char() {
+    int value = get_value();
+
+    if (value == NO_VALUE) {
+        return '_';
+    } else {
+        return static_cast<char>(value) + '0';
     }
 }
 
 Board::Board() {
-
+    
 }
 
 std::string Board::dump_to_string() {
-    return  "_________\n"
-            "_________\n"
-            "_________\n"
-            "_________\n"
-            "_________\n"
-            "_________\n"
-            "_________\n"
-            "_________\n"
-            "_________";
+    auto it = cells.begin();
+
+    std::string result;
+
+    // This is a horrible way to do it... must learn how to do this a bit better
+
+    for (int y = 0; y < 9; y++) {
+        for (int x = 0; x < 9; x++) {
+            result += (it++)->to_char();
+        }
+        if (y != 8) {
+            result += '\n';
+        }
+    }
+
+    return result;
+}
+
+void Board::set_cell(int x, int y, uint16_t value) {
+
 }
