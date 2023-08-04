@@ -30,3 +30,18 @@ TEST_CASE("Newly initialised board is empty") {
                                       "_________"
     );
 }
+
+TEST_CASE("Can set a single value") {
+    Board board{};
+    board.set_cell(0, 0, 1);
+    CHECK(board.dump_to_string() == "1________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________"
+    );
+}

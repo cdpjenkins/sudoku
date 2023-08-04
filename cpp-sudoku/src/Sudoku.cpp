@@ -77,5 +77,5 @@ std::string Board::dump_to_string() {
 }
 
 void Board::set_cell(int x, int y, uint16_t value) {
-
+    cells[y * 81 + x] = Cell::of(value);
 }
