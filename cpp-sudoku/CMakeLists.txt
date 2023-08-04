@@ -5,10 +5,13 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(cpp_sudoku
         src/main.cpp
-        src/hello.cpp)
+        src/hello.cpp
+        src/Sudoku.cpp)
 
 add_executable(cpp_sudoku_doctest
         test/test.cpp
-        src/hello.cpp)
+        test/SudokuTest.cpp
+        src/hello.cpp
+        src/Sudoku.cpp)
 
 
