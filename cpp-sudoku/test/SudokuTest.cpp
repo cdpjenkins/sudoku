@@ -63,7 +63,7 @@ TEST_CASE("Can set a single value") {
 
 TEST_CASE("Can initialise board with multiple cells") {
     // notice how no constrain propagation is happening yet
-    Board board{"12345678_\n"
+    Board board{"1234567__\n"
                 "_________\n"
                 "_________\n"
                 "_________\n"
@@ -72,7 +72,7 @@ TEST_CASE("Can initialise board with multiple cells") {
                 "_________\n"
                 "98765____\n"
                 "_________"};
-    CHECK(board.dump_to_string() == "12345678_\n"
+    CHECK(board.dump_to_string() == "1234567__\n"
                                     "_________\n"
                                     "_________\n"
                                     "_________\n"
@@ -83,3 +83,27 @@ TEST_CASE("Can initialise board with multiple cells") {
                                     "_________"
     );
 }
+
+TEST_CASE("Constraint propagation works along rows") {
+    // notice how no constrain propagation is happening yet
+    Board board{"12345678_\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "_________"};
+    CHECK(board.dump_to_string() == "123456789\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________"
+    );
+}
+

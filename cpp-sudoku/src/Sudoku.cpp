@@ -1,4 +1,5 @@
 #include <sstream>
+#include <iostream>
 
 #include "Sudoku.hpp"
 
@@ -29,7 +30,7 @@ int Cell::get_value() {
 
 Cell Cell::parse(char c) {
     if (isdigit(c)) {
-        int value = c - '0';
+        int value = parse_value(c);
 
         return Cell::of(value);
     } else {
@@ -37,9 +38,21 @@ Cell Cell::parse(char c) {
     }
 }
 
+int Cell::parse_value(char c) {
+    if (isdigit(c)) {
+        int value = c - '0';
+
+        return value;
+    } else {
+        return NO_VALUE;
+    }
+}
+
 Cell Cell::of(int value) {
     if (value >= 1 && value <= 9) {
         return Cell(1 << value);
+    } else if (value == 0) {
+        return Cell();
     } else {
         throw std::runtime_error("bad value: " + std::to_string(value));
     }
@@ -53,6 +66,10 @@ char Cell::to_char() {
     } else {
         return static_cast<char>(value) + '0';
     }
+}
+
+Cell Cell::eliminate_possibility(int value) {
+    return Cell{static_cast<uint16_t>(possibilities & ~(1 << value))};
 }
 
 Board::Board() {
@@ -72,7 +89,10 @@ Board::Board(std::string &&input) {
         auto ch_it = line.begin();
         for (int x = 0; x < 9; x++) {
             char ch = *ch_it++;
-            (*cells_it++) = Cell::parse(ch);
+            int value = Cell::parse_value(ch);
+            if (value != Cell::NO_VALUE) {
+                set_cell(x, y, value);
+            }
         }
     }
 }
@@ -97,5 +117,16 @@ std::string Board::dump_to_string() {
 }
 
 void Board::set_cell(int x, int y, uint16_t value) {
-    cells[y * 81 + x] = Cell::of(value);
+    for (int x1 = 0; x1 < 9; x1++) {
+        if (x1 != x) {
+            Cell &cell = cell_at(x1, y);
+            cell_at(x1, y) = cell.eliminate_possibility(value);
+        }
+    }
+
+    cell_at(x, y) = Cell::of(value);
+}
+
+Cell& Board::cell_at(int x, int y) {
+    return cells[y * 9 + x];
 }
