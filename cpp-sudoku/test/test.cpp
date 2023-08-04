@@ -1,7 +1,7 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
-#include "hello.hpp"
+#include "../src/hello.hpp"
 
 TEST_CASE("Says hello to you") {
     CHECK(say_hello() == "Hello, World!");
