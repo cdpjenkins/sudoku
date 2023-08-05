@@ -1,3 +1,4 @@
+#include <iostream>
 #include <sstream>
 #include <vector>
 
@@ -139,7 +140,7 @@ void Board::set_cell(int x, int y, uint16_t value) {
 
     int xo = x - (x % 3);
     int yo = y - (y % 3);
-    for (int y1 = xo; y1 < yo + 3; y1++) {
+    for (int y1 = yo; y1 < yo + 3; y1++) {
         for (int x1 = xo; x1 < xo + 3; x1++) {
             if (x1 != x && y1 != y) {
                 eliminate_possibility_at(x1, y1, value);
@@ -204,7 +205,24 @@ void Board::solve_one_iteration() {
         }
     }
 
-
     // squares
+    for (int yo = 0; yo < 9; yo += 3) {
+        for (int xo = 0; xo < 9; xo += 3) {
+            for (int value = 1; value < 9; value++) {
+                std::vector<int> possible_cells;
+                for (int y = xo; y < yo + 3; y++) {
+                    for (int x = xo; x < xo + 3; x++) {
+                        if (cell_at(x, y).has_possible(value)) {
+                            possible_cells.push_back(y * 16 + x);
+                        }
+                    }
+                }
 
+                if (possible_cells.size() == 1) {
+                    int& cell = possible_cells.front();
+                    set_cell(cell % 16, cell / 16, value);
+                }
+            }
+        }
+    }
 }

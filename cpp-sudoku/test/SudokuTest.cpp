@@ -217,4 +217,26 @@ TEST_CASE("Can infer value of the only cell in a column that could hold that val
     );
 }
 
+TEST_CASE("Can infer value of the only cell in a square that could hold that value") {
+    Board board{"________1\n"
+                "_____1___\n"
+                "_________\n"
+                "_1_______\n"
+                "_________\n"
+                "_________\n"
+                "__1______\n"
+                "_________\n"
+                "_________"};
+    board.solve_one_iteration();
+    CHECK(board.dump_to_string() == "________1\n"
+                                    "_____1___\n"
+                                    "1________\n"
+                                    "_1_______\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "__1______\n"
+                                    "_________\n"
+                                    "_________"
+    );
+}
 
