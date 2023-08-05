@@ -17,16 +17,16 @@ public:
     static int parse_value(char c);
     static Cell of(int value);
 
-    int get_value();
+    int get_value() const;
     Cell eliminate_possibility(int value);
     char to_char();
+    bool is_solved() const;
 
     static constexpr int NO_VALUE = 0;
 private:
     // bit n indicates that this cell can (possibly) be in
     // this implies that bits 1..9 are used and the rest are not
     uint16_t possibilities;
-
 };
 
 class Board {
@@ -40,6 +40,8 @@ public:
 
 private:
     std::array<Cell, 81> cells;
+
+    void eliminate_possibility_at(int x, int y, uint16_t value);
 };
 
 #endif //CPP_SUDOKU_SUDOKU_HPP

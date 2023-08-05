@@ -3,7 +3,7 @@
 
 #include "Sudoku.hpp"
 
-int Cell::get_value() {
+int Cell::get_value() const {
     switch (possibilities) {
         case (1 << 1):
             return 1;
@@ -72,6 +72,10 @@ Cell Cell::eliminate_possibility(int value) {
     return Cell{static_cast<uint16_t>(possibilities & ~(1 << value))};
 }
 
+bool Cell::is_solved() const {
+    return get_value() != 0;
+}
+
 Board::Board() {
     
 }
@@ -119,15 +123,13 @@ std::string Board::dump_to_string() {
 void Board::set_cell(int x, int y, uint16_t value) {
     for (int x1 = 0; x1 < 9; x1++) {
         if (x1 != x) {
-            Cell &cell = cell_at(x1, y);
-            cell_at(x1, y) = cell.eliminate_possibility(value);
+            eliminate_possibility_at(x1, y, value);
         }
     }
 
     for (int y1 = 0; y1 < 9; y1++) {
         if (y1 != y) {
-            Cell &cell = cell_at(x, y1);
-            cell_at(x, y1) = cell.eliminate_possibility(value);
+            eliminate_possibility_at(x, y1, value);
         }
     }
 
@@ -136,13 +138,27 @@ void Board::set_cell(int x, int y, uint16_t value) {
     for (int y1 = xo; y1 < yo + 3; y1++) {
         for (int x1 = xo; x1 < xo + 3; x1++) {
             if (x1 != x && y1 != y) {
-                Cell &cell = cell_at(x1, y1);
-                cell_at(x1, y1) = cell.eliminate_possibility(value);
+                eliminate_possibility_at(x1, y1, value);
             }
         }
     }
 
     cell_at(x, y) = Cell::of(value);
+}
+
+void Board::eliminate_possibility_at(int x, int y, uint16_t value) {
+    Cell &cell = cell_at(x, y);
+
+    if (!cell.is_solved()) {
+        const Cell new_cell = cell.eliminate_possibility(value);
+
+        if (new_cell.is_solved()) {
+            cell_at(x, y) = new_cell;
+            set_cell(x, y, new_cell.get_value());
+        }
+
+        cell_at(x, y) = new_cell;
+    }
 }
 
 Cell& Board::cell_at(int x, int y) {
