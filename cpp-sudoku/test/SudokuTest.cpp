@@ -62,7 +62,6 @@ TEST_CASE("Can set a single value") {
 }
 
 TEST_CASE("Can initialise board with multiple cells") {
-    // notice how no constrain propagation is happening yet
     Board board{"1234567__\n"
                 "_________\n"
                 "_________\n"
@@ -70,7 +69,7 @@ TEST_CASE("Can initialise board with multiple cells") {
                 "_________\n"
                 "_________\n"
                 "_________\n"
-                "98765____\n"
+                "9876_____\n"
                 "_________"};
     CHECK(board.dump_to_string() == "1234567__\n"
                                     "_________\n"
@@ -79,13 +78,12 @@ TEST_CASE("Can initialise board with multiple cells") {
                                     "_________\n"
                                     "_________\n"
                                     "_________\n"
-                                    "98765____\n"
+                                    "9876_____\n"
                                     "_________"
     );
 }
 
 TEST_CASE("Constraint propagation works along rows") {
-    // notice how no constrain propagation is happening yet
     Board board{"12345678_\n"
                 "_________\n"
                 "_________\n"
@@ -104,6 +102,28 @@ TEST_CASE("Constraint propagation works along rows") {
                                     "_________\n"
                                     "_________\n"
                                     "_________"
+    );
+}
+
+TEST_CASE("Constraint propagation works along columns") {
+    Board board{"________1\n"
+                "________2\n"
+                "________3\n"
+                "________4\n"
+                "________5\n"
+                "________6\n"
+                "________7\n"
+                "________8\n"
+                "_________"};
+    CHECK(board.dump_to_string() == "________1\n"
+                                    "________2\n"
+                                    "________3\n"
+                                    "________4\n"
+                                    "________5\n"
+                                    "________6\n"
+                                    "________7\n"
+                                    "________8\n"
+                                    "________9"
     );
 }
 

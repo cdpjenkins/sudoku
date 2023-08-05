@@ -124,6 +124,13 @@ void Board::set_cell(int x, int y, uint16_t value) {
         }
     }
 
+    for (int y1 = 0; y1 < 9; y1++) {
+        if (y1 != y) {
+            Cell &cell = cell_at(x, y1);
+            cell_at(x, y1) = cell.eliminate_possibility(value);
+        }
+    }
+
     cell_at(x, y) = Cell::of(value);
 }
 
