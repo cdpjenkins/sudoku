@@ -4,3 +4,7 @@ The purpose of this repository is to hold my attempts at solving Sudoku in vario
 
 All are strongly influenced by [Peter Norvid's Sudoku solver](https://norvig.com/sudoku.html), but manage to be
 somewhat less elegant.
+
+A Clojure Sudoku solver (which I wrote many years ago, after the first time
+that I read Peter Norvig's post) can be found [here](https://github.com/cdpjenkins/clodoku).
+
