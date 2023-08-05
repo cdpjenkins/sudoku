@@ -240,3 +240,27 @@ TEST_CASE("Can infer value of the only cell in a square that could hold that val
     );
 }
 
+TEST_CASE("Can solve easy board in one teration") {
+    Board board{"53__7____\n"
+                "6__195___\n"
+                "_98____6_\n"
+                "8___6___3\n"
+                "4__8_3__1\n"
+                "7___2___6\n"
+                "_6____28_\n"
+                "___419__5\n"
+                "____8__79"};
+    board.solve_one_iteration();
+    CHECK(board.dump_to_string() == "534678912\n"
+                                    "672195348\n"
+                                    "198342567\n"
+                                    "859761423\n"
+                                    "426853791\n"
+                                    "713924856\n"
+                                    "961537284\n"
+                                    "287419635\n"
+                                    "345286179"
+    );
+
+}
+
