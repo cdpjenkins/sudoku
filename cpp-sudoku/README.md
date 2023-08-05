@@ -1,7 +1,7 @@
 # C++ Sudoku Solver
 This is a work-in-progress Sudoku solver written as I attempt to re-learn C++ after many years. 
 
-I'm still fairly early in my Modern C++ journey so this colde is likely pretty terrible but I'm hoping to learn a lot
+I'm still fairly early in my Modern C++ journey so this code is likely pretty terrible but I'm hoping to learn a lot
 along the way.
 
 Given that this is C++, I'm hoping to ultimately wring every last drop of performance out of the machine and solve
