@@ -195,16 +195,21 @@ void Board::solve_one_iteration() {
     // rows
     for (int row_y = 0; row_y < 9; row_y++) {
         for (int value = 1; value <= 9; value++) {
-            std::vector<int> possible_xs;
+            int found_x = -1;
 
             for (int x = 0; x < 9; x++) {
                 if (cell_at(x, row_y).has_possible(value)) {
-                    possible_xs.push_back(x);
+                    if (found_x == -1) {
+                        found_x = x;
+                    } else {
+                        found_x = -1;
+                        break;
+                    }
                 }
             }
 
-            if (possible_xs.size() == 1) {
-                set_cell(possible_xs[0], row_y, value);
+            if (found_x != -1) {
+                set_cell(found_x, row_y, value);
             }
         }
     }
@@ -212,16 +217,21 @@ void Board::solve_one_iteration() {
     // columns
     for (int col_x = 0; col_x < 9; col_x++) {
         for (int value = 1; value <= 9; value++) {
-            std::vector<int> possible_ys;
+            int found_y = -1;
 
             for (int y = 0; y < 9; y++) {
                 if (cell_at(col_x, y).has_possible(value)) {
-                    possible_ys.push_back(y);
+                    if (found_y == -1) {
+                        found_y = y;
+                    } else {
+                        found_y = -1;
+                        break;
+                    }
                 }
             }
 
-            if (possible_ys.size() == 1) {
-                set_cell(col_x, possible_ys[0], value);
+            if (found_y != -1) {
+                set_cell(col_x, found_y, value);
             }
         }
     }
@@ -230,18 +240,23 @@ void Board::solve_one_iteration() {
     for (int yo = 0; yo < 9; yo += 3) {
         for (int xo = 0; xo < 9; xo += 3) {
             for (int value = 1; value <= 9; value++) {
-                std::vector<int> possible_cells;
+                int found_square = -1;
+
                 for (int y = xo; y < yo + 3; y++) {
                     for (int x = xo; x < xo + 3; x++) {
                         if (cell_at(x, y).has_possible(value)) {
-                            possible_cells.push_back(y * 16 + x);
+                            if (found_square == -1) {
+                                found_square = y * 16 + x;
+                            } else {
+                                found_square = -1;
+                                goto more_than_one_found;
+                            }
                         }
                     }
                 }
-
-                if (possible_cells.size() == 1) {
-                    int& cell = possible_cells.front();
-                    set_cell(cell % 16, cell / 16, value);
+more_than_one_found:
+                if (found_square != -1) {
+                    set_cell(found_square % 16, found_square / 16, value);
                 }
             }
         }
