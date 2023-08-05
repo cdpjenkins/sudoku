@@ -83,7 +83,7 @@ TEST_CASE("Can initialise board with multiple cells") {
     );
 }
 
-TEST_CASE("Constraint propagation works along rows") {
+TEST_CASE("Can eliminate values along rows") {
     Board board{"12345678_\n"
                 "_________\n"
                 "_________\n"
@@ -105,7 +105,7 @@ TEST_CASE("Constraint propagation works along rows") {
     );
 }
 
-TEST_CASE("Constraint propagation works along columns") {
+TEST_CASE("Can eliminate values along columns") {
     Board board{"________1\n"
                 "________2\n"
                 "________3\n"
@@ -126,4 +126,27 @@ TEST_CASE("Constraint propagation works along columns") {
                                     "________9"
     );
 }
+
+TEST_CASE("Can eliminate values in squares") {
+    Board board{"123______\n"
+                "456______\n"
+                "78______\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "_________"};
+    CHECK(board.dump_to_string() == "123______\n"
+                                    "456______\n"
+                                    "789______\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________"
+    );
+}
+
 

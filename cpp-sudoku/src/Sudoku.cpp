@@ -131,6 +131,17 @@ void Board::set_cell(int x, int y, uint16_t value) {
         }
     }
 
+    int xo = x - (x % 3);
+    int yo = y - (y % 3);
+    for (int y1 = xo; y1 < yo + 3; y1++) {
+        for (int x1 = xo; x1 < xo + 3; x1++) {
+            if (x1 != x && y1 != y) {
+                Cell &cell = cell_at(x1, y1);
+                cell_at(x1, y1) = cell.eliminate_possibility(value);
+            }
+        }
+    }
+
     cell_at(x, y) = Cell::of(value);
 }
 
