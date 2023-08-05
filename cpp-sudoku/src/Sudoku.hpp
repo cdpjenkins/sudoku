@@ -42,8 +42,12 @@ public:
     Cell& cell_at(int , int y);
 
     void solve_one_iteration();
+    void solve_multiple_iterations();
+
+    bool is_modified_this_time() { return modified_this_time; }
 
 private:
+    bool modified_this_time = false;
     std::array<Cell, 81> cells;
 
     void eliminate_possibility_at(int x, int y, uint16_t value);

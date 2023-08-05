@@ -148,7 +148,10 @@ void Board::set_cell(int x, int y, uint16_t value) {
         }
     }
 
-    cell_at(x, y) = Cell::of(value);
+    if (!cell_at(x, y).is_solved()) {
+        modified_this_time = true;
+        cell_at(x, y) = Cell::of(value);
+    }
 }
 
 void Board::eliminate_possibility_at(int x, int y, uint16_t value) {
@@ -171,9 +174,11 @@ Cell& Board::cell_at(int x, int y) {
 }
 
 void Board::solve_one_iteration() {
+    modified_this_time = false;
+
     // rows
     for (int row_y = 0; row_y < 9; row_y++) {
-        for (int value = 1; value < 9; value++) {
+        for (int value = 1; value <= 9; value++) {
             std::vector<int> possible_xs;
 
             for (int x = 0; x < 9; x++) {
@@ -190,7 +195,7 @@ void Board::solve_one_iteration() {
 
     // columns
     for (int col_x = 0; col_x < 9; col_x++) {
-        for (int value = 1; value < 9; value++) {
+        for (int value = 1; value <= 9; value++) {
             std::vector<int> possible_ys;
 
             for (int y = 0; y < 9; y++) {
@@ -208,7 +213,7 @@ void Board::solve_one_iteration() {
     // squares
     for (int yo = 0; yo < 9; yo += 3) {
         for (int xo = 0; xo < 9; xo += 3) {
-            for (int value = 1; value < 9; value++) {
+            for (int value = 1; value <= 9; value++) {
                 std::vector<int> possible_cells;
                 for (int y = xo; y < yo + 3; y++) {
                     for (int x = xo; x < xo + 3; x++) {
@@ -225,4 +230,10 @@ void Board::solve_one_iteration() {
             }
         }
     }
+}
+
+void Board::solve_multiple_iterations() {
+    do {
+        solve_one_iteration();
+    } while (is_modified_this_time());
 }

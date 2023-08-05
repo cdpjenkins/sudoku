@@ -261,6 +261,30 @@ TEST_CASE("Can solve easy board in one teration") {
                                     "287419635\n"
                                     "345286179"
     );
+}
 
+TEST_CASE("Can only partially solve a hard board with repeated calls to solve_one_iteration") {
+    Board board{"_____8__6\n"
+                "9_17_53_4\n"
+                "_____4_1_\n"
+                "1__94__5_\n"
+                "49__5__67\n"
+                "_2__71__3\n"
+                "_3_4_____\n"
+                "2_53_97_1\n"
+                "7__5_____"};
+
+    board.solve_multiple_iterations();
+
+    CHECK(board.dump_to_string() == "3__198_76\n"
+                                    "9_17_53_4\n"
+                                    "____34_1_\n"
+                                    "1__94__5_\n"
+                                    "49__5_167\n"
+                                    "52__71__3\n"
+                                    "_3_417___\n"
+                                    "2_53_97_1\n"
+                                    "71_5___3_"
+    );
 }
 
