@@ -77,8 +77,24 @@ bool Cell::is_solved() const {
     return get_value() != 0;
 }
 
-bool Cell::has_possible(int value) {
+bool Cell::is_impossible() const {
+    return num_possibles() == 0;
+}
+
+bool Cell::has_possible(int value) const {
     return possibilities & (1 << value);
+}
+
+int Cell::num_possibles() const {
+    int result = 0;
+    
+    for (int value = 1; value <= 9; value++) {
+        if (has_possible(value)) {
+            result += 1;
+        }
+    }
+    
+    return result;
 }
 
 Board::Board() {
@@ -236,4 +252,79 @@ void Board::solve_multiple_iterations() {
     do {
         solve_one_iteration();
     } while (is_modified_this_time());
+}
+
+Board Board::depth_first_search() {
+    Cell cell_to_search = Cell{};
+    Position pos_to_search = Position{-1, -1};
+    int current_min_num_possibles = 10;
+
+    // find cell with smallest number of possibles
+    for (int y = 0; y < 9; y++) {
+        for (int x = 0; x < 9; x++) {
+            Cell &cell = cell_at(x, y);
+            int num_possibles = cell.num_possibles();
+
+            if (num_possibles != 1 && num_possibles < current_min_num_possibles) {
+                cell_to_search = cell;
+                pos_to_search = Position(x, y);
+                current_min_num_possibles = num_possibles;
+            }
+        }
+    }
+
+    for (int guess = 1; guess < 9; guess++) {
+        if (cell_to_search.has_possible(guess)) {
+            Board new_board {*this};
+            new_board.set_cell(pos_to_search.x, pos_to_search.y, guess);
+
+            new_board.solve_multiple_iterations();
+
+            if (new_board.is_impossible()) {
+                continue;
+            }
+
+            Board new_new_board = new_board.solve();
+            if (new_new_board.is_impossible()) {
+                continue;
+            }
+
+            if (new_new_board.is_solved()) {
+                return new_new_board;
+            }
+        }
+    }
+
+    throw std::runtime_error("Couldn't find one... aiaiaiaiaiaai");
+}
+
+bool Board::is_solved() const {
+    for (auto cell : cells) {
+        if (!cell.is_solved()) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Board::is_impossible() const {
+    for (auto cell : cells) {
+        if (cell.is_impossible()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+Board Board::solve() {
+    solve_multiple_iterations();
+    if (is_solved()) {
+        return *this;
+    } else if (is_impossible()) {
+        throw std::runtime_error(dump_to_string());
+    } else {
+        return depth_first_search();
+    }
 }

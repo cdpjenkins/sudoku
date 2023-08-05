@@ -1,3 +1,4 @@
+#include <iostream>
 #include "doctest.h"
 
 #include "../src/Sudoku.hpp"
@@ -238,6 +239,7 @@ TEST_CASE("Can infer value of the only cell in a square that could hold that val
                                     "_________\n"
                                     "_________"
     );
+    CHECK(board.is_solved() == false);
 }
 
 TEST_CASE("Can solve easy board in one teration") {
@@ -250,7 +252,9 @@ TEST_CASE("Can solve easy board in one teration") {
                 "_6____28_\n"
                 "___419__5\n"
                 "____8__79"};
+
     board.solve_one_iteration();
+
     CHECK(board.dump_to_string() == "534678912\n"
                                     "672195348\n"
                                     "198342567\n"
@@ -261,6 +265,7 @@ TEST_CASE("Can solve easy board in one teration") {
                                     "287419635\n"
                                     "345286179"
     );
+    CHECK(board.is_solved() == true);
 }
 
 TEST_CASE("Can only partially solve a hard board with repeated calls to solve_one_iteration") {
@@ -286,5 +291,31 @@ TEST_CASE("Can only partially solve a hard board with repeated calls to solve_on
                                     "2_53_97_1\n"
                                     "71_5___3_"
     );
+    CHECK(board.is_solved() == false);
 }
 
+TEST_CASE("Can fully solve a hard board with depth first search") {
+    Board board{"_____8__6\n"
+                "9_17_53_4\n"
+                "_____4_1_\n"
+                "1__94__5_\n"
+                "49__5__67\n"
+                "_2__71__3\n"
+                "_3_4_____\n"
+                "2_53_97_1\n"
+                "7__5_____"};
+
+    Board solved_board{board.solve()};
+
+    CHECK(solved_board.dump_to_string() == "342198576\n"
+                                           "961725384\n"
+                                           "857634912\n"
+                                           "173946258\n"
+                                           "498253167\n"
+                                           "526871493\n"
+                                           "639417825\n"
+                                           "285369741\n"
+                                           "714582639"
+    );
+    CHECK(solved_board.is_solved() == true);
+}

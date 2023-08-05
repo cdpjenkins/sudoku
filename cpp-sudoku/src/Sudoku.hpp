@@ -21,10 +21,12 @@ public:
     Cell eliminate_possibility(int value);
     char to_char();
     bool is_solved() const;
+    bool is_impossible() const;
+
+    bool has_possible(int value) const;
+    int num_possibles() const;
 
     static constexpr int NO_VALUE = 0;
-
-    bool has_possible(int value);
 
 private:
     // bit n indicates that this cell can (possibly) be in
@@ -32,19 +34,33 @@ private:
     uint16_t possibilities;
 };
 
+class Position {
+public:
+    explicit Position(int x, int y) : x(x), y(y) {}
+
+    int x;
+    int y;
+};
+
 class Board {
 public:
     explicit Board();
     explicit Board(std::string &&input);
 
+    Board solve();
+    void solve_one_iteration();
+    void solve_multiple_iterations();
+
     std::string dump_to_string();
     void set_cell(int x, int y, uint16_t value);
     Cell& cell_at(int , int y);
 
-    void solve_one_iteration();
-    void solve_multiple_iterations();
+    Board depth_first_search();
 
     bool is_modified_this_time() { return modified_this_time; }
+
+    bool is_solved() const;
+    bool is_impossible() const;
 
 private:
     bool modified_this_time = false;
