@@ -171,4 +171,28 @@ TEST_CASE("Constraint propagation happens") {
     );
 }
 
+TEST_CASE("Can infer value of the only cell in a row that could hold a particular value") {
+    Board board{"1________\n"
+                "______1__\n"
+                "___1_____\n"
+                "_1_______\n"
+                "____1____\n"
+                "_______1_\n"
+                "__1______\n"
+                "_____1___\n"
+                "_________"};
+    board.solve_one_iteration();
+    CHECK(board.dump_to_string() == "1________\n"
+                                    "______1__\n"
+                                    "___1_____\n"
+                                    "_1_______\n"
+                                    "____1____\n"
+                                    "_______1_\n"
+                                    "__1______\n"
+                                    "_____1___\n"
+                                    "________1"
+    );
+}
+
+
 

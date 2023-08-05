@@ -23,6 +23,9 @@ public:
     bool is_solved() const;
 
     static constexpr int NO_VALUE = 0;
+
+    bool has_possible(int value);
+
 private:
     // bit n indicates that this cell can (possibly) be in
     // this implies that bits 1..9 are used and the rest are not
@@ -37,6 +40,8 @@ public:
     std::string dump_to_string();
     void set_cell(int x, int y, uint16_t value);
     Cell& cell_at(int , int y);
+
+    void solve_one_iteration();
 
 private:
     std::array<Cell, 81> cells;

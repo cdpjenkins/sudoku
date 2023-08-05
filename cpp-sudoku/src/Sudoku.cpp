@@ -1,5 +1,5 @@
 #include <sstream>
-#include <iostream>
+#include <vector>
 
 #include "Sudoku.hpp"
 
@@ -74,6 +74,10 @@ Cell Cell::eliminate_possibility(int value) {
 
 bool Cell::is_solved() const {
     return get_value() != 0;
+}
+
+bool Cell::has_possible(int value) {
+    return possibilities & (1 << value);
 }
 
 Board::Board() {
@@ -163,4 +167,29 @@ void Board::eliminate_possibility_at(int x, int y, uint16_t value) {
 
 Cell& Board::cell_at(int x, int y) {
     return cells[y * 9 + x];
+}
+
+void Board::solve_one_iteration() {
+    // rows
+    for (int row_y = 0; row_y < 9; row_y++) {
+        for (int value = 1; value < 9; value++) {
+            std::vector<int> possible_xs;
+
+            for (int x = 0; x < 9; x++) {
+                if (cell_at(x, row_y).has_possible(value)) {
+                    possible_xs.push_back(x);
+                }
+            }
+
+            if (possible_xs.size() == 1) {
+                set_cell(possible_xs[0], row_y, value);
+            }
+        }
+    }
+
+    // columns
+
+
+    // squares
+
 }
