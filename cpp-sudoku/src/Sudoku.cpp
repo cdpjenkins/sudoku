@@ -188,6 +188,21 @@ void Board::solve_one_iteration() {
     }
 
     // columns
+    for (int col_x = 0; col_x < 9; col_x++) {
+        for (int value = 1; value < 9; value++) {
+            std::vector<int> possible_ys;
+
+            for (int y = 0; y < 9; y++) {
+                if (cell_at(col_x, y).has_possible(value)) {
+                    possible_ys.push_back(y);
+                }
+            }
+
+            if (possible_ys.size() == 1) {
+                set_cell(col_x, possible_ys[0], value);
+            }
+        }
+    }
 
 
     // squares

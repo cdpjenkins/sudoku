@@ -194,5 +194,27 @@ TEST_CASE("Can infer value of the only cell in a row that could hold a particula
     );
 }
 
+TEST_CASE("Can infer value of the only cell in a column that could hold that value") {
+    Board board{"________2\n"
+                "________3\n"
+                "________4\n"
+                "________5\n"
+                "________6\n"
+                "________7\n"
+                "___1_____\n"
+                "1________\n"
+                "_________"};
+    board.solve_one_iteration();
+    CHECK(board.dump_to_string() == "________2\n"
+                                    "________3\n"
+                                    "________4\n"
+                                    "________5\n"
+                                    "________6\n"
+                                    "________7\n"
+                                    "___1_____\n"
+                                    "1________\n"
+                                    "________1"
+    );
+}
 
 
