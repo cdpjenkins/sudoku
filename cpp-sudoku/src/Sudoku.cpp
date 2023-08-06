@@ -122,6 +122,21 @@ Board::Board(std::string &&input) {
     }
 }
 
+Board::Board(std::vector<std::string> &lines) {
+    int y = 0;
+    for (auto& line : lines) {
+        auto ch_it = line.begin();
+        for (int x = 0; x < 9; x++) {
+            char ch = *ch_it++;
+            int value = Cell::parse_value(ch);
+            if (value != Cell::NO_VALUE) {
+                set_cell(x, y, value);
+            }
+        }
+        y++;
+    }
+}
+
 std::string Board::dump_to_string() {
     auto it = cells.begin();
 

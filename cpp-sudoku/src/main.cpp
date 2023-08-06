@@ -1,21 +1,35 @@
 #include <iostream>
-#include "hello.hpp"
+#include <fstream>
+#include <vector>
+
 #include "Sudoku.hpp"
 
-int main() {
-    for (auto i = 0; i < 1000; i++) {
-        Board board{"_____8__6\n"
-                    "9_17_53_4\n"
-                    "_____4_1_\n"
-                    "1__94__5_\n"
-                    "49__5__67\n"
-                    "_2__71__3\n"
-                    "_3_4_____\n"
-                    "2_53_97_1\n"
-                    "7__5_____"};
+std::vector<std::string> read_input_file(char *const *argv);
 
-        Board solved_board{board.solve()};
-
-        std::cout << solved_board.dump_to_string() << std::endl;
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        std::cerr << "Usage: cpp_sudoku board-file" << std::endl;
+        return 1;
     }
+
+    std::vector<std::string> lines = read_input_file(argv);
+
+    Board board{lines};
+    Board solved_board{board.solve()};
+    std::cout << solved_board.dump_to_string() << std::endl;
+}
+
+std::vector<std::string> read_input_file(char *const *argv) {
+    std::ifstream input_stream{argv[1]};
+    if (!input_stream) {
+        std::cerr << "Failed to open " << argv[1] << std::endl;
+        throw std::runtime_error("Failed to open " + std::string(argv[1]));
+    }
+
+    std::__1::vector<std::string> lines;
+    std::string str;
+    while (std::getline(input_stream, str)) {
+        lines.push_back(str);
+    }
+    return lines;
 }
