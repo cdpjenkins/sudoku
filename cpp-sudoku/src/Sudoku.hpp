@@ -7,6 +7,7 @@
 #include <array>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 class Cell {
 public:
