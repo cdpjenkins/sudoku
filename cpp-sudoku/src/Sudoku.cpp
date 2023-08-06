@@ -134,6 +134,10 @@ Board::Board(std::vector<std::string> &lines) {
             }
         }
         y++;
+
+        if (y >= 9) {
+            break;
+        }
     }
 }
 
