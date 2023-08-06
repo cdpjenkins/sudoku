@@ -122,7 +122,7 @@ Board::Board(std::string &&input) {
     }
 }
 
-Board::Board(std::vector<std::string> &lines) {
+Board::Board(const std::vector<std::string>& lines) : Board() {
     int y = 0;
     for (auto& line : lines) {
         auto ch_it = line.begin();

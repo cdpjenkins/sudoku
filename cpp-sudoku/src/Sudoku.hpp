@@ -46,7 +46,7 @@ class Board {
 public:
     explicit Board();
     explicit Board(std::string&& input);
-    explicit Board(std::vector<std::string>& lines);
+    explicit Board(const std::vector<std::string>& lines);
 
     Board solve();
     void solve_one_iteration();
