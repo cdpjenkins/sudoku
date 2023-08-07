@@ -161,31 +161,35 @@ std::string Board::dump_to_string() {
 }
 
 void Board::set_cell(int x, int y, uint16_t value) {
-    for (int x1 = 0; x1 < 9; x1++) {
-        if (x1 != x) {
-            eliminate_possibility_at(x1, y, value);
-        }
-    }
-
-    for (int y1 = 0; y1 < 9; y1++) {
-        if (y1 != y) {
-            eliminate_possibility_at(x, y1, value);
-        }
-    }
-
-    int xo = x - (x % 3);
-    int yo = y - (y % 3);
-    for (int y1 = yo; y1 < yo + 3; y1++) {
-        for (int x1 = xo; x1 < xo + 3; x1++) {
-            if (x1 != x && y1 != y) {
-                eliminate_possibility_at(x1, y1, value);
+    if (cell_at(x, y).has_possible(value)) {
+        for (int x1 = 0; x1 < 9; x1++) {
+            if (x1 != x) {
+                eliminate_possibility_at(x1, y, value);
             }
         }
-    }
 
-    if (!cell_at(x, y).is_solved()) {
-        modified_this_time = true;
-        cell_at(x, y) = Cell::of(value);
+        for (int y1 = 0; y1 < 9; y1++) {
+            if (y1 != y) {
+                eliminate_possibility_at(x, y1, value);
+            }
+        }
+
+        int xo = x - (x % 3);
+        int yo = y - (y % 3);
+        for (int y1 = yo; y1 < yo + 3; y1++) {
+            for (int x1 = xo; x1 < xo + 3; x1++) {
+                if (x1 != x && y1 != y) {
+                    eliminate_possibility_at(x1, y1, value);
+                }
+            }
+        }
+
+        if (!cell_at(x, y).is_solved()) {
+            modified_this_time = true;
+            cell_at(x, y) = Cell::of(value);
+        }
+    } else {
+        cell_at(x, y) = Cell{Cell::NO_VALUE};
     }
 }
 
@@ -201,6 +205,10 @@ void Board::eliminate_possibility_at(int x, int y, uint16_t value) {
         }
 
         cell_at(x, y) = new_cell;
+    } else {
+        if (cell.get_value() == value) {
+            set_cell(x, y, Cell::NO_VALUE);
+        }
     }
 }
 
@@ -329,7 +337,7 @@ Board Board::depth_first_search() {
         }
     }
 
-    throw std::runtime_error("Couldn't find one... aiaiaiaiaiaai");
+    return *this;
 }
 
 bool Board::is_solved() const {

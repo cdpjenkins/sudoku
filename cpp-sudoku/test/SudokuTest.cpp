@@ -319,3 +319,19 @@ TEST_CASE("Can fully solve a hard board with depth first search") {
     );
     CHECK(solved_board.is_solved() == true);
 }
+
+TEST_CASE("Can NOT solve a board that has no solution") {
+    Board board{"_98__425_\n"
+                "___2____3\n"
+                "__5_____8\n"
+                "__34__17_\n"
+                "6____9___\n"
+                "________2\n"
+                "_2__7____\n"
+                "_______8_\n"
+                "__71__54_"};
+
+    Board solved_board{board.solve()};
+
+    CHECK(solved_board.is_solved() == false);
+}
