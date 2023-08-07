@@ -321,6 +321,8 @@ TEST_CASE("Can fully solve a hard board with depth first search") {
 }
 
 TEST_CASE("Can NOT solve a board that has no solution") {
+    // I'm not actually convinced that this board does not have a solution but several sites on the interwebs think that
+    // it can't be solved
     Board board{"_98__425_\n"
                 "___2____3\n"
                 "__5_____8\n"
