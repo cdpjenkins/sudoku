@@ -4,7 +4,7 @@
 
 #include "Sudoku.hpp"
 
-std::vector<std::string> read_input_file(const char *filename) {
+std::vector<std::string> read_input_file(const std::string &filename) {
     std::ifstream input_stream{filename};
     if (!input_stream) {
         std::cerr << "Failed to open " << filename << std::endl;
