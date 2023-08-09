@@ -4,11 +4,11 @@
 
 #include "Sudoku.hpp"
 
-std::vector<std::string> read_input_file(char *const *argv) {
-    std::ifstream input_stream{argv[1]};
+std::vector<std::string> read_input_file(const char *filename) {
+    std::ifstream input_stream{filename};
     if (!input_stream) {
-        std::cerr << "Failed to open " << argv[1] << std::endl;
-        throw std::runtime_error("Failed to open " + std::string(argv[1]));
+        std::cerr << "Failed to open " << filename << std::endl;
+        throw std::runtime_error("Failed to open " + std::string(filename));
     }
 
     std::vector<std::string> lines;
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::vector<std::string> lines = read_input_file(argv);
+    std::vector<std::string> lines = read_input_file(argv[1]);
 
     Board board{lines};
     Board solved_board{board.solve()};
