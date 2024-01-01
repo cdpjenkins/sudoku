@@ -19,9 +19,14 @@ public:
     static Cell of(int value);
 
     int get_value() const;
-    Cell eliminate_possibility(int value);
+    Cell eliminate_possibility(int value) const {
+        return Cell{static_cast<uint16_t>(possibilities & ~(1 << value))};
+    }
     char to_char();
-    bool is_solved() const;
+    bool is_solved() const {
+        return get_value() != 0;
+    }
+
     bool is_impossible() const;
 
     bool has_possible(int value) const;

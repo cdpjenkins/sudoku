@@ -69,14 +69,6 @@ char Cell::to_char() {
     }
 }
 
-Cell Cell::eliminate_possibility(int value) {
-    return Cell{static_cast<uint16_t>(possibilities & ~(1 << value))};
-}
-
-bool Cell::is_solved() const {
-    return get_value() != 0;
-}
-
 bool Cell::is_impossible() const {
     return num_possibles() == 0;
 }
