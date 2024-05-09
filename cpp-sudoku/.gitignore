@@ -1,4 +1,7 @@
 cmake-build-*
+build-release
+build
+.vscode
 /atari-build/cpp-sudoku
 /atari-build/*.o
 /atari-build/cpp-sudoku.ttp

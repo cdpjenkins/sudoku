@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
 
     Board board{lines};
     Board solved_board{board.solve()};
-    std::cout << solved_board.dump_to_string() << std::endl;
+    std::cout << solved_board.dump_to_string_with_guides() << std::endl;
 
 #ifdef WAIT_FOR_KEYPRESS_BEFORE_QUIT
     std::cin.get();

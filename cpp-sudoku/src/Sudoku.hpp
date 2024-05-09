@@ -59,6 +59,7 @@ public:
     void solve_multiple_iterations();
 
     std::string dump_to_string();
+    std::string dump_to_string_with_guides();
     void set_cell(int x, int y, uint16_t value);
     Cell& cell_at(int , int y);
 

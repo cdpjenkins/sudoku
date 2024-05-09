@@ -1,3 +1,4 @@
+#include <bit>
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -142,6 +143,32 @@ std::string Board::dump_to_string() {
 
     for (int y = 0; y < 9; y++) {
         for (int x = 0; x < 9; x++) {
+            result += (it++)->to_char();
+        }
+        if (y != 8) {
+            result += '\n';
+        }
+    }
+
+    return result;
+}
+
+std::string Board::dump_to_string_with_guides() {
+    auto it = cells.begin();
+
+    std::string result;
+
+    // This is a horrible way to do it... must learn how to do this a bit better
+
+    for (int y = 0; y < 9; y++) {
+        if ((y) && (y % 3 == 0)) {
+            result += "---+---+---\n";  
+        }
+
+        for (int x = 0; x < 9; x++) {
+            if ((x) && (x % 3 == 0)) {
+                result += "|";  
+            }
             result += (it++)->to_char();
         }
         if (y != 8) {
