@@ -320,6 +320,33 @@ TEST_CASE("Can fully solve a hard board with depth first search") {
     CHECK(solved_board.is_solved() == true);
 }
 
+TEST_CASE("Depth first search can guess 9") {
+    // Same hard board as above, with 4s and 9s swapped, so that the search has to guess a 9 to find the solution
+    Board board{"_____8__6\n"
+                "4_17_53_9\n"
+                "_____9_1_\n"
+                "1__49__5_\n"
+                "94__5__67\n"
+                "_2__71__3\n"
+                "_3_9_____\n"
+                "2_53_47_1\n"
+                "7__5_____"};
+
+    Board solved_board{board.solve()};
+
+    CHECK(solved_board.dump_to_string() == "392148576\n"
+                                           "461725389\n"
+                                           "857639412\n"
+                                           "173496258\n"
+                                           "948253167\n"
+                                           "526871943\n"
+                                           "634917825\n"
+                                           "285364791\n"
+                                           "719582634"
+    );
+    CHECK(solved_board.is_solved() == true);
+}
+
 TEST_CASE("Can NOT solve a board that has no solution") {
     // I'm not actually convinced that this board does not have a solution but several sites on the interwebs think that
     // it can't be solved

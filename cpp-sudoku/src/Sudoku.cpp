@@ -334,7 +334,7 @@ Board Board::depth_first_search() {
         }
     }
 
-    for (int guess = 1; guess < 9; guess++) {
+    for (int guess = 1; guess <= 9; guess++) {
         if (cell_to_search.has_possible(guess)) {
             Board new_board {*this};
             new_board.set_cell(pos_to_search.x, pos_to_search.y, guess);
