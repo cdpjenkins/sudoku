@@ -172,6 +172,25 @@ TEST_CASE("Constraint propagation happens") {
     );
 }
 
+TEST_CASE("Setting a cell that leads to a contradiction makes the board impossible") {
+    // The first three cells of the top row can each only be 1 or 2, so setting any of them must eventually lead to a
+    // contradiction
+    Board board{"___345678\n"
+                "9________\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "_________"};
+    CHECK(board.is_impossible() == false);
+
+    board.set_cell(0, 0, 1);
+
+    CHECK(board.is_impossible() == true);
+}
+
 TEST_CASE("Can infer value of the only cell in a row that could hold a particular value") {
     Board board{"1________\n"
                 "______1__\n"
