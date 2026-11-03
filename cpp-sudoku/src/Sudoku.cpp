@@ -288,7 +288,7 @@ void Board::solve_one_iteration() {
             for (int value = 1; value <= 9; value++) {
                 int found_square = -1;
 
-                for (int y = xo; y < yo + 3; y++) {
+                for (int y = yo; y < yo + 3; y++) {
                     for (int x = xo; x < xo + 3; x++) {
                         if (cell_at(x, y).has_possible(value)) {
                             if (found_square == -1) {

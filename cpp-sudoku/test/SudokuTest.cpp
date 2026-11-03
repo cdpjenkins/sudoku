@@ -242,6 +242,31 @@ TEST_CASE("Can infer value of the only cell in a square that could hold that val
     CHECK(board.is_solved() == false);
 }
 
+TEST_CASE("Can infer value of the only cell in the top-middle square that could hold that value") {
+    // The only place for a 1 in the top-middle square is the top-left corner of that square, but its row and column
+    // both have other places that a 1 could go
+    Board board{"____4____\n"
+                "___25____\n"
+                "___36____\n"
+                "_________\n"
+                "_____1___\n"
+                "_________\n"
+                "_________\n"
+                "_________\n"
+                "_________"};
+    board.solve_one_iteration();
+    CHECK(board.dump_to_string() == "___14____\n"
+                                    "___25____\n"
+                                    "___36____\n"
+                                    "_________\n"
+                                    "_____1___\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________\n"
+                                    "_________"
+    );
+}
+
 TEST_CASE("Can solve easy board in one teration") {
     Board board{"53__7____\n"
                 "6__195___\n"
